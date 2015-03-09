@@ -1,0 +1,4 @@
+---
+- name: Restart MCt
+  service: name=mct_production state=restarted
+# handlers file for roles/mct

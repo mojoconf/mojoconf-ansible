@@ -1,0 +1,7 @@
+- hosts: mojoconf
+  pre_tasks:
+    - user: name=www home=/home/www
+  roles:
+    - base
+    - plenv
+    - mct

@@ -1,0 +1,42 @@
+---
+- name: Install deps.
+  apt: name={{item}} state=installed
+  with_items:
+    - postgresql
+    - postgresql-server-dev-9.3
+    - python-psycopg2
+
+- git: repo=https://github.com/mojoconf/mct dest="{{mct_app_home}}"
+  sudo_user: "{{mct_app_user}}"
+  sudo: yes
+
+- name: Install deps
+  shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}"
+  register: cpanm_install
+  changed_when: cpanm_install.stdout | match('distributions*\sinstalled')
+  tags: [ git, debug ]
+  notify:
+  - Restart MCT
+
+- postgresql_user: name={{mct_postgres_user}} password={{mct_postgres_pass}}
+  sudo_user: postgres
+  sudo: yes
+  
+- postgresql_db: owner={{mct_postgres_user}} name={{mct_postgres_db}}
+  sudo_user: postgres
+  sudo: yes
+
+- template: src="mct.conf.j2" dest="{{mct_app_home}}/mct.{{item}}.conf"
+  with_items:
+    - development
+    - production
+
+- template: src=init.d.j2 dest="/etc/init.d/{{mct_app}}_{{item}}" owner=root mode=0755
+  with_items:
+    - development
+    - production
+
+- service: name="{{mct_app}}_{{item}}" state=started enabled=yes
+  with_items:
+    - development
+    - production

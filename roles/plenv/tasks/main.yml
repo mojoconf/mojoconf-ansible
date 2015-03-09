@@ -1,0 +1,50 @@
+---
+- name: plenv | update plenv repo
+  git: repo=git://github.com/tokuhirom/plenv.git dest={{ plenv_root }} accept_hostkey=true
+  sudo: True
+  sudo_user: "{{ plenv_user }}"
+
+- name: plenv | install perl-build
+  git: repo=git://github.com/tokuhirom/Perl-Build.git dest=/home/{{ plenv_user }}/.plenv/plugins/perl-build accept_hostkey=true
+  sudo: True
+  sudo_user: "{{ plenv_user }}"
+
+- name: plenv | add plenv initialization to profile
+  template: src=plenv.sh.j2 dest=/etc/profile.d/plenv.sh owner=root group=root mode=0755
+  sudo_user: root
+
+- name: plenv | Get perls
+  shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv versions chdir={{ plenv_root }}
+  register: global_perl
+  changed_when: false
+  ignore_errors: True
+  always_run: true
+  sudo: True
+  sudo_user: "{{ plenv_user }}"
+  tags: debug
+
+- name: plenv | install perl
+  shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv install {{ perl_version }} chdir={{ plenv_root }}
+  when: global_perl.stdout.find(perl_version) == -1
+  register: install_perl
+  sudo: True
+  sudo_user: "{{ plenv_user }}"
+
+- name: plenv | try to set global perl
+  shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv global {{ perl_version }} chdir={{ plenv_root }}
+  sudo: True
+  when: global_perl.stdout.find("* "+perl_version) == -1
+  sudo_user: "{{ plenv_user }}"
+
+- name: plenv | install cpanm
+  shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv install-cpanm chdir={{ plenv_root }}
+  sudo: True
+  register: install_cpanm
+  changed_when: install_cpanm.stdout.find('App::cpanminus is up to date')==-1
+  sudo_user: "{{ plenv_user }}"
+
+- name: plenv | rehash
+  shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv rehash chdir={{ plenv_root }}
+  sudo: True
+  when: install_cpanm.changed or install_perl.changed
+  sudo_user: "{{ plenv_user }}"

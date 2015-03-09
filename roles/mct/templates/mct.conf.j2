@@ -1,0 +1,16 @@
+{
+  # Database connection DSN
+  db => 'postgresql://{{mct_postgres_user}}:{{mct_postgres_pass}}@localhost/{{mct_app}}_{{item}}'
+
+  # A list of secrets to use for hashing session cookies
+  secrets => [{{mct_secrets}}],
+
+  # Github OAuth2 settings
+  providers => {
+    github => {
+      key    => {{mct_github_key}},
+      secret => {{mct_github_secret}}
+    },
+  },
+}
+

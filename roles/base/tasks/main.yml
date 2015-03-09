@@ -1,0 +1,21 @@
+---
+- name: Install dependencies
+  apt: name={{item}} state=installed update_cache=true
+  with_items: 
+    - git
+    - build-essential
+
+- name: Create ops group
+  group: name=ops state=present
+
+- name: Allow password-less sudo for ops
+  copy: "dest=/etc/sudoers.d/ops mode=0440 owner=root group=root
+  content='%ops ALL=(ALL:ALL) NOPASSWD: ALL'"
+
+- name: Create users
+  user: name={{ item }} groups=ops state=present shell=/bin/bash
+  with_items: users
+
+- name: Setup authorized_keys for users
+  authorized_key: user={{ item }} key="{{ lookup('file', 'public_keys/'+item+'.pub') }}"
+  with_items: users
