@@ -1,6 +1,9 @@
 ---
-- name: Restart MCT
+- name: restart mct production
   service: name=mct-production state=restarted
+
+- name: restart mct development
+  service: name=mct-development state=restarted
   
 - name: restart nginx
   service: name=nginx state=restarted
