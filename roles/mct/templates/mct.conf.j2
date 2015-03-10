@@ -12,5 +12,13 @@
       secret => '{{mct_github_secret[item.key]}}'
     },
   },
+
+  # Hypnotoad config
+  hypnotoad => {
+    listen => [qw( http://localhost:{{item.value.port}} )],
+    pid_file => '/tmp/{{mct_app}}_{{item.key}}.pid',
+    proxy => 1,
+    workers => 8,
+  },
 }
 
