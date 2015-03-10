@@ -3,9 +3,9 @@
 ##### install in /etc/init #####
 ########################################
 
-description "MCT {{item}} mode"
-env APP={{mct_app_home}}-{{item}}/script/mct
-env MOJO_MODE={{item}}
+description "MCT {{item.key}} mode"
+env APP={{mct_app_home}}-{{item.key}}/script/mct
+env MOJO_MODE={{item.key}}
 
 setuid {{plenv_user}}
 

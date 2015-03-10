@@ -1,0 +1,19 @@
+upstream {{mct_app}}-{{item.key}}-upstream {
+   server 127.0.0.1:{{item.value.port}};
+}
+
+server {
+    listen 80;
+    server_name {{item.value.name}};
+    access_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.access.log;
+    error_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.error.log;
+    location / {
+        root /var/www;
+    }
+
+    location / {
+         proxy_read_timeout 300;
+         proxy_pass http://{{mct_app}}-{{item.key}}-upstream;
+         proxy_set_header Host $http_host;
+    }
+

@@ -7,7 +7,7 @@
     - postgresql-server-dev-9.3
     - python-psycopg2
 
-- git: repo=https://github.com/mojoconf/mct dest="{{mct_app_home}}-{{item.key}}"
+- git: repo=https://github.com/mojoconf/ct dest="{{mct_app_home}}-{{item.key}}"
   sudo_user: "{{mct_app_user}}"
   sudo: yes
   with_dict: mct_envs
@@ -25,7 +25,8 @@
   sudo_user: postgres
   sudo: yes
   
-- postgresql_db: owner="{{mct_postgres_user}}" name="{{mct_postgres_db}}"
+- postgresql_db: owner="{{mct_postgres_user}}" name="mct_{{item.key}}"
+  with_dict: mct_envs
   sudo_user: postgres
   sudo: yes
 

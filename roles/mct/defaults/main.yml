@@ -2,9 +2,8 @@
 mct_app: mct
 mct_app_home: /home/www/mct
 mct_app_user: www
-mct_postgres_user: mct
+mct_postgres_user: www
 mct_postgres_pass: secret
-mct_postgres_db: mct_production
 mct_secrets: ['needs-to-be-overridden-iin-vault']
 mct_github_key: foo
 mct_github_secret: bar
