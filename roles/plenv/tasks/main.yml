@@ -21,7 +21,6 @@
   always_run: true
   sudo: True
   sudo_user: "{{ plenv_user }}"
-  tags: debug
 
 - name: plenv | install perl
   shell: PLENV_ROOT={{ plenv_root }} PATH={{ plenv_root }}/bin:$PATH plenv install {{ perl_version }} chdir={{ plenv_root }}
