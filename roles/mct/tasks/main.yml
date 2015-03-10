@@ -13,6 +13,11 @@
   with_dict: mct_envs
   tags: [ webapp ]
 
+- file: path="{{mct_app_home}}-{{item.key}}/log" owner={{mct_postgres_user}} state=directory
+  with_dict: mct_envs
+  notify: "restart mct {{item.key}}"
+  tags: [ webapp ]
+
 - name: Install deps
   shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}-{{item.key}}"
   with_dict: mct_envs
