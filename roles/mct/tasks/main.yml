@@ -7,10 +7,11 @@
     - postgresql-server-dev-9.3
     - python-psycopg2
 
-- git: repo=https://github.com/mojoconf/ct dest="{{mct_app_home}}-{{item.key}}"
+- git: repo=https://github.com/mojoconf/MCT dest="{{mct_app_home}}-{{item.key}}"
   sudo_user: "{{mct_app_user}}"
   sudo: yes
   with_dict: mct_envs
+  tags: [ webapp ]
 
 - name: Install deps
   shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}-{{item.key}}"
@@ -20,6 +21,7 @@
   tags: [ git, debug ]
   notify:
     - restart mct
+  tags: [ webapp ]
 
 - postgresql_user: name="{{mct_postgres_user}}" password="{{mct_postgres_pass}}"
   sudo_user: postgres
