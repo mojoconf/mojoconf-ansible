@@ -4,7 +4,7 @@
 ########################################
 
 description "MCT {{item}} mode"
-env APP={{mct_app_home}}/script/mct
+env APP={{mct_app_home}}-{{item}}/script/mct
 env MOJO_MODE={{item}}
 
 setuid {{plenv_user}}

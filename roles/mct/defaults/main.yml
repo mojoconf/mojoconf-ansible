@@ -8,3 +8,6 @@ mct_postgres_db: mct_production
 mct_secrets: ['needs-to-be-overridden-iin-vault']
 mct_github_key: foo
 mct_github_secret: bar
+mct_modes:
+  - development
+  - production
