@@ -49,7 +49,7 @@
   tags: [ nginx ]
 
 - name: Setup link 
-  file: state=link path="/etc/nginx/sites-enabled/{{mtc_app}}-{{item.key}}.conf" src="/etc/nginx/sites-enabled/{{mct_app}}-{{item.key}}.conf" owner=root
+  file: state=link path="/etc/nginx/sites-enabled/{{mct_app}}-{{item.key}}.conf" src="/etc/nginx/sites-available/{{mct_app}}-{{item.key}}.conf" owner=root
   with_dict: mct_envs
   notify: restart nginx
   tags: [ nginx ]

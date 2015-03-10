@@ -4,16 +4,18 @@ upstream {{mct_app}}-{{item.key}}-upstream {
 
 server {
     listen 80;
-    server_name {{item.value.name}};
+    server_name {{item.value.hostname}};
+    {% for alias in item.value.aliases %};
+    server_name {{alias}};
+    {% endfor %}
+
     access_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.access.log;
     error_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.error.log;
-    location / {
-        root /var/www;
-    }
+    root {{mct_app_home}}-{{item.key}}/public;
 
     location / {
          proxy_read_timeout 300;
          proxy_pass http://{{mct_app}}-{{item.key}}-upstream;
          proxy_set_header Host $http_host;
     }
-
+}
