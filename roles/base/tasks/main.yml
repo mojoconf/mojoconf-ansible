@@ -4,6 +4,7 @@
   with_items: 
     - git
     - build-essential
+    - logrotate
 
 - name: Create ops group
   group: name=ops state=present

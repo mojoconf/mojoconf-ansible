@@ -1,0 +1,10 @@
+{{mct_app_home}}-{{item.key}}/log/*.log {
+  compress
+  copytruncate
+  daily
+  dateext
+  delaycompress
+  extension .log
+  missingok
+  rotate 31
+}

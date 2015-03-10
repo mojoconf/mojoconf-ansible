@@ -13,17 +13,21 @@
   with_dict: mct_envs
   tags: [ webapp ]
 
-- file: path="{{mct_app_home}}-{{item.key}}/log" owner={{mct_postgres_user}} state=directory
+- file: path="{{mct_app_home}}-{{item.key}}/log" owner={{mct_postgres_user}} state=directory mode=0755
   with_dict: mct_envs
-  notify: "restart mct {{item.key}}"
-  tags: [ webapp ]
+  notify: restart mct
+  tags: [ webapp, log ]
+
+- template: src="logrotate.j2" dest="/etc/logrotate.d/{{mct_app}}-{{item.key}}"
+  with_dict: mct_envs
+  tags: [ log ]
 
 - name: Install deps
   shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}-{{item.key}}"
   with_dict: mct_envs
   register: cpanm_install
   changed_when: cpanm_install.stdout | match('distributions*\sinstalled')
-  notify: "restart mct {{item.key}}"
+  notify: restart mct
   tags: [ webapp ]
 
 - postgresql_user: name="{{mct_postgres_user}}" password="{{mct_postgres_pass}}"

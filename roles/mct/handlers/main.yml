@@ -1,6 +1,6 @@
 ---
-- name: restart mct production
-  service: name=mct-production state=restarted
+- name: restart mct
+  service: name="mct-{{item.key}}" state=restarted
 
 - name: restart mct development
   service: name=mct-development state=restarted
