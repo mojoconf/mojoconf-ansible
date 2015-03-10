@@ -58,3 +58,6 @@
   with_dict: mct_envs
   notify: restart nginx
   tags: [ nginx ]
+
+- command: /etc/init.d/nginx configtest
+  tags: [ nginx ]

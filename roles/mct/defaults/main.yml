@@ -13,9 +13,11 @@ mct_envs:
     hostname: test.mojoconf.com
     aliases: []
   production:
-    hostname: mct.mojoconf.com
+    hostname: www.mojoconf.com
     port: 8081
     aliases:
-      - www.mojoconf.com
       - mojoconf.com
+      - mojoconf.org
+      - www.mojoconf.org
+      - mct.mojoconf.com
 

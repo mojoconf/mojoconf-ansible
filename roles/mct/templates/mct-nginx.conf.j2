@@ -5,9 +5,16 @@ upstream {{mct_app}}-{{item.key}}-upstream {
 server {
     listen 80;
     server_name {{item.value.hostname}};
+
     {% for alias in item.value.aliases %}
     server_name {{alias}};
+    if ($host = {{alias}}) {
+      rewrite ^(.*)$ http://{{item.value.hostname}}$1 permanent;
+    }
     {% endfor %}
+
+    {% if item.value.hostname == 'www.mojoconf.com' %}
+    {% endif %}
 
     access_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.access.log;
     error_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.error.log;
