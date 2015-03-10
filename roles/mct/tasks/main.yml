@@ -2,6 +2,7 @@
 - name: Install deps.
   apt: name={{item}} state=installed
   with_items:
+    - nginx
     - postgresql
     - postgresql-server-dev-9.3
     - python-psycopg2
@@ -31,12 +32,12 @@
     - development
     - production
 
-- template: src=init.d.j2 dest="/etc/init.d/{{mct_app}}_{{item}}" owner=root mode=0755
+- template: src=mct-upstart.conf.j2 dest="/etc/init/{{mct_app}}-{{item}}.conf" owner=root mode=0644
   with_items:
     - development
     - production
 
-- service: name="{{mct_app}}_{{item}}" state=started enabled=yes
+- service: name="{{mct_app}}-{{item}}" state=started enabled=yes
   with_items:
     - development
     - production

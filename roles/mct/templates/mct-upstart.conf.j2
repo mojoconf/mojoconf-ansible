@@ -1,0 +1,21 @@
+########################################
+##### casual-bookings.conf #####
+##### install in /etc/init #####
+########################################
+
+description "MCT {{item}} mode"
+env APP={{mct_app_home}}/script/mct
+env MOJO_MODE={{item}}
+
+setuid {{plenv_user}}
+
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+exec {{plenv_root}}/shims/hypnotoad -f $APP
+
+pre-stop exec {{plenv_root}}/shims/hypnotoad $APP --stop
+
+
+normal exit 0 1 TERM HUP
