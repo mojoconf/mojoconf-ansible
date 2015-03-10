@@ -1,41 +1,50 @@
 ---
 - name: Install deps.
-  apt: name={{item}} state=installed
+  apt: name="{{item}}" state=installed
   with_items:
     - nginx
     - postgresql
     - postgresql-server-dev-9.3
     - python-psycopg2
 
-- git: repo=https://github.com/mojoconf/mct dest="{{mct_app_home}}-{{item}}"
+- git: repo=https://github.com/mojoconf/mct dest="{{mct_app_home}}-{{item.key}}"
   sudo_user: "{{mct_app_user}}"
   sudo: yes
-  with_items: mct_modes
+  with_dict: mct_envs
 
 - name: Install deps
-  shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}-{{item}}"
-  with_items: mct_modes
+  shell: "{{plenv_root}}/shims/cpanm --installdeps {{mct_app_home}}-{{item.key}}"
+  with_dict: mct_envs
   register: cpanm_install
   changed_when: cpanm_install.stdout | match('distributions*\sinstalled')
   tags: [ git, debug ]
   notify:
-    - Restart MCT
+    - restart mct
 
-- postgresql_user: name={{mct_postgres_user}} password={{mct_postgres_pass}}
+- postgresql_user: name="{{mct_postgres_user}}" password="{{mct_postgres_pass}}"
   sudo_user: postgres
   sudo: yes
   
-- postgresql_db: owner={{mct_postgres_user}} name={{mct_postgres_db}}
+- postgresql_db: owner="{{mct_postgres_user}}" name="{{mct_postgres_db}}"
   sudo_user: postgres
   sudo: yes
 
-- template: src="mct.conf.j2" dest="{{mct_app_home}}/mct.{{item}}.conf"
-  with_items: mct_modes
+- template: src="mct.conf.j2" dest="{{mct_app_home}}/mct.{{item.key}}.conf"
+  with_dict: mct_envs
   tags: [ config ]
 
-- template: src=mct-upstart.conf.j2 dest="/etc/init/{{mct_app}}-{{item}}.conf" owner=root mode=0644
-  with_items: mct_modes
+- template: src=mct-upstart.conf.j2 dest="/etc/init/{{mct_app}}-{{item.key}}.conf" owner=root mode=0644
+  with_dict: mct_envs
   tags: [ config ]
 
-- service: name="{{mct_app}}-{{item}}" state=started enabled=yes
-  with_items: mct_modes
+- service: name="{{mct_app}}-{{item.key}}" state=started enabled=yes
+  with_dict: mct_envs
+
+- template: src=mct-nginx.conf.j2 dest="/etc/nginx/sites-available/{{mct_app}}-{{item.key}}.conf" owner=root mode=0644
+  with_dict: mct_envs
+  notify: restart nginx
+
+- name: Setup link 
+  file: state=link path="/etc/nginx/sites-enabled/{{mtc_app}}-{{item.key}}.conf" src="/etc/nginx/sites-enabled/{{mct_app}}-{{item.key}}.conf" owner=root
+  with_dict: mct_envs
+  notify: restart nginx

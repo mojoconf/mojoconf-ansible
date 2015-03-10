@@ -8,6 +8,15 @@ mct_postgres_db: mct_production
 mct_secrets: ['needs-to-be-overridden-iin-vault']
 mct_github_key: foo
 mct_github_secret: bar
-mct_modes:
-  - development
-  - production
+mct_envs:
+  development:
+    port: 8080
+    hostname: test.mojoconf.com
+    aliases: []
+  production:
+    hostname: mct.mojoconf.com
+    port: 8081
+    aliases:
+      - www.mojoconf.com
+      - mojoconf.com
+

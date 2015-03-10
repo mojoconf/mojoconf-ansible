@@ -1,15 +1,15 @@
 {
   # Database connection DSN
-  db => 'postgresql://{{mct_postgres_user}}:{{mct_postgres_pass}}@localhost/{{mct_app}}_{{item}}',
+  db => 'postgresql://{{mct_postgres_user}}:{{mct_postgres_pass}}@localhost/{{mct_app}}_{{item.key}}',
 
   # A list of secrets to use for hashing session cookies
-  secrets => {{mct_secrets[item] | to_json}},
+  secrets => {{mct_secrets[item.key] | to_json}},
 
   # Github OAuth2 settings
   providers => {
     github => {
-      key    => '{{mct_github_key[item]}}',
-      secret => '{{mct_github_secret[item]}}'
+      key    => '{{mct_github_key[item.key]}}',
+      secret => '{{mct_github_secret[item.key]}}'
     },
   },
 }

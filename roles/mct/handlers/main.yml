@@ -1,4 +1,6 @@
 ---
-- name: Restart MCt
-  service: name=mct_production state=restarted
-# handlers file for roles/mct
+- name: Restart MCT
+  service: name=mct-production state=restarted
+  
+- name: restart nginx
+  service: name=nginx state=restarted
