@@ -31,11 +31,13 @@
   with_items:
     - development
     - production
+  tags: [ config ]
 
 - template: src=mct-upstart.conf.j2 dest="/etc/init/{{mct_app}}-{{item}}.conf" owner=root mode=0644
   with_items:
     - development
     - production
+  tags: [ config ]
 
 - service: name="{{mct_app}}-{{item}}" state=started enabled=yes
   with_items:
