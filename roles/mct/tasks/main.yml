@@ -36,9 +36,9 @@
   sudo: yes
   tags: [ webapp ]
 
-- template: src="mct.conf.j2" dest="{{mct_app_home}}/mct.{{item.key}}.conf"
+- template: src="mct.conf.j2" dest="{{mct_app_home}}-{{item.key}}/mct.{{item.key}}.conf"
   with_dict: mct_envs
-  tags: [ config ]
+  tags: [ config, webapp ]
 
 - template: src=mct-upstart.conf.j2 dest="/etc/init/{{mct_app}}-{{item.key}}.conf" owner=root mode=0644
   with_dict: mct_envs
