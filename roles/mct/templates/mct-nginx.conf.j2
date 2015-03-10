@@ -5,7 +5,7 @@ upstream {{mct_app}}-{{item.key}}-upstream {
 server {
     listen 80;
     server_name {{item.value.hostname}};
-    {% for alias in item.value.aliases %};
+    {% for alias in item.value.aliases %}
     server_name {{alias}};
     {% endfor %}
 
