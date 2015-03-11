@@ -40,6 +40,14 @@ Note: Any changes done directly on the mct server will be wiped.
 * [How do I purge my cache?](https://support.cloudflare.com/hc/en-us/articles/200169246-How-do-I-purge-my-cache-)
 * [How do I purge a single file from cache?](https://support.cloudflare.com/hc/en-us/articles/200169386-How-do-I-purge-a-single-file-from-cache-)
 
+## Make SSL key/cert
+
+    openssl genrsa -out mojoconf.key 4096
+
+    openssl req -new -sha256 -x509 -extensions v3_ca -days 365 \
+      -key mojoconf.key -out mojoconf.crt \
+      -subj /C=NO/ST=Oslo/L=Oslo/O=Mojoconf/CN=mojoconf.com
+
 ## Author
 
 Marcus Ramberg

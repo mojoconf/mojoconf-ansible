@@ -55,10 +55,12 @@
   with_dict: mct_envs
   tags: [ webapp ]
 
+- include: ssl.yml
+
 - template: src=mct-nginx.conf.j2 dest="/etc/nginx/sites-available/{{mct_app}}-{{item.key}}.conf" owner=root mode=0644
   with_dict: mct_envs
   notify: restart nginx
-  tags: [ nginx ]
+  tags: [ nginx, ssl ]
 
 - name: Setup link 
   file: state=link path="/etc/nginx/sites-enabled/{{mct_app}}-{{item.key}}.conf" src="/etc/nginx/sites-available/{{mct_app}}-{{item.key}}.conf" owner=root

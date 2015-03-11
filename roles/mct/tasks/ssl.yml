@@ -1,0 +1,11 @@
+---
+- file: path="/etc/nginx/pki" state=directory mode=0750
+  tags: [ nginx, ssl ]
+
+- copy: content="{{ssl_private_key}}" dest=/etc/nginx/pki/mojoconf.key owner=root group=root mode=0600
+  notify: restart nginx
+  tags: [ nginx, ssl ]
+
+- copy: src=mojoconf.crt dest=/etc/nginx/pki/mojoconf.crt owner=root group=ops mode=0750
+  notify: restart nginx
+  tags: [ nginx, ssl ]
