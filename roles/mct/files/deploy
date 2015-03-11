@@ -1,0 +1,24 @@
+#!/bin/sh
+MODE="$1";
+BRANCH=${2:-master};
+RUN_AS="www";
+SELF=$(readlink -f $0);
+
+run () {
+  echo "\$ $@";
+  $@;
+  echo "------------------------------------------------------------------- \$?=$?";
+  echo;
+}
+
+[ -z $MODE ] && echo "Usage: $0 <production|development> [branch]" && exit 1;
+[ "x$USER" = "x$RUN_AS" ] || run exec sudo -i -u $RUN_AS $SELF $MODE;
+
+run cd /home/www/mct-$MODE;
+run git remote update;
+run git reset --hard;
+run git checkout $BRANCH;
+run git rebase origin/$BRANCH;
+
+export MOJO_CONFIG="/home/www/mct-$MODE/mct.$MODE.conf";
+run hypnotoad /home/www/mct-$MODE/script/mct

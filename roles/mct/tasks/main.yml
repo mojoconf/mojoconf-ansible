@@ -48,6 +48,9 @@
   with_dict: mct_envs
   tags: [ config ]
 
+- copy: src=deploy dest=/usr/local/bin/deploy owner=root group=ops mode=0755
+  tags: [ deploy ]
+
 - service: name="{{mct_app}}-{{item.key}}" state=started enabled=yes
   with_dict: mct_envs
   tags: [ webapp ]
