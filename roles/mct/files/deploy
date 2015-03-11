@@ -19,6 +19,7 @@ run git remote update;
 run git reset --hard;
 run git checkout $BRANCH;
 run git rebase origin/$BRANCH;
+run cpanm --installdeps .;
 
 export MOJO_CONFIG="/home/www/mct-$MODE/mct.$MODE.conf";
 run hypnotoad /home/www/mct-$MODE/script/mct
