@@ -12,7 +12,7 @@ run () {
 }
 
 [ -z $MODE ] && echo "Usage: $0 <production|development> [branch]" && exit 1;
-[ "x$USER" = "x$RUN_AS" ] || exec sudo -i -u $RUN_AS $SELF $MODE;
+[ "x$USER" = "x$RUN_AS" ] || exec sudo -i -u $RUN_AS $SELF $MODE $BRANCH;
 
 if [ "x$MODE" = "xstatus" ]; then
   for m in development production; do
@@ -26,7 +26,7 @@ fi
 
 run cd /home/www/mct-$MODE;
 run git remote update;
-run git checkout -f -B master origin/master;
+run git checkout -f -B $BRANCH origin/$BRANCH;
 run cpanm --installdeps .;
 
 export MOJO_CONFIG="/home/www/mct-$MODE/mct.$MODE.conf";
