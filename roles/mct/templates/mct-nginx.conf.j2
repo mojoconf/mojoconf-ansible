@@ -17,6 +17,10 @@ server {
     if ($host = {{alias}}) { rewrite ^(.*)$ http://{{item.value.hostname}}$1 permanent; }
     {% endfor %}
 
+    {% if item.value.hostname == "www.mojoconf.com" -%}
+    if ($scheme = http) { return 302 https://$server_name$request_uri; }
+    {% endif %}
+
     access_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.access.log;
     error_log /var/log/nginx/{{mct_app}}-{{item.key}}.no.error.log;
     root {{mct_app_home}}-{{item.key}}/public;
