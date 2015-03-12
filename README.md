@@ -33,6 +33,8 @@ To deploy parts of the playbook:
 See also [deploy source](https://github.com/mojoconf/mojoconf-ansible/blob/master/roles/mct/files/deploy)
 or run `deploy` for more options.
 
+It's also possible to run `deploy status` to see which commit is active.
+
 Note: Any changes done directly on the mct server will be wiped.
 
 ## Clear cache from cloudflare

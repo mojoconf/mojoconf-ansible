@@ -12,7 +12,17 @@ run () {
 }
 
 [ -z $MODE ] && echo "Usage: $0 <production|development> [branch]" && exit 1;
-[ "x$USER" = "x$RUN_AS" ] || run exec sudo -i -u $RUN_AS $SELF $MODE;
+[ "x$USER" = "x$RUN_AS" ] || exec sudo -i -u $RUN_AS $SELF $MODE;
+
+if [ "x$MODE" = "xstatus" ]; then
+  for m in development production; do
+    cd /home/www/mct-$m;
+    echo "$m:";
+    git log HEAD^..HEAD --pretty=format:'%Cgreen%ci %Cred%h%Creset %s %Cgreen%C(bold blue)<%an>%Creset %C(yellow)%d%Creset';
+    echo;
+  done
+  exit;
+fi
 
 run cd /home/www/mct-$MODE;
 run git remote update;
