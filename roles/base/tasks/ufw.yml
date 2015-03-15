@@ -1,0 +1,6 @@
+---
+- apt: name=ufw
+- ufw: proto=tcp port=22 rule=allow
+- ufw: proto=tcp port=80 rule=allow
+- ufw: proto=tcp port=443 rule=allow
+- ufw: state=enabled direction=incoming policy=deny
