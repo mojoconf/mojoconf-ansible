@@ -9,16 +9,21 @@
   providers => {
     github => {
       key    => '{{mct_github_key[item.key]}}',
-      secret => '{{mct_github_secret[item.key]}}'
+      secret => '{{mct_github_secret[item.key]}}',
     },
+  },
+
+  stripe => {
+    key    => '{{mct_stripe_key[item.key]}}',
+    secret => '{{mct_stripe_secret[item.key]}}',
   },
 
   # Hypnotoad config
   hypnotoad => {
-    listen => [qw( http://localhost:{{item.value.port}} )],
+    listen   => [qw( http://localhost:{{item.value.port}} )],
     pid_file => '/tmp/{{mct_app}}_{{item.key}}.pid',
-    proxy => 1,
-    workers => 8,
+    proxy    => 1,
+    workers  => 8,
   },
 }
 

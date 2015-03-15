@@ -11,7 +11,7 @@
   sudo_user: "{{mct_app_user}}"
   sudo: yes
   with_dict: mct_envs
-  tags: [ webapp ]
+  tags: [ webapp, git ]
 
 - file: path="{{mct_app_home}}-{{item.key}}/log" owner={{mct_postgres_user}} state=directory mode=0755
   with_dict: mct_envs
@@ -40,7 +40,7 @@
   sudo: yes
   tags: [ webapp ]
 
-- template: src="mct.conf.j2" dest="{{mct_app_home}}-{{item.key}}/mct.{{item.key}}.conf"
+- template: src="mct.conf.j2" dest="{{mct_app_home}}-{{item.key}}/mct.{{item.key}}.conf" mode=0600
   with_dict: mct_envs
   tags: [ config, webapp ]
 
