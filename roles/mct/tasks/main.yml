@@ -40,7 +40,7 @@
   sudo: yes
   tags: [ webapp ]
 
-- template: src="mct.conf.j2" dest="{{mct_app_home}}-{{item.key}}/mct.{{item.key}}.conf" mode=0600
+- template: src="mct.conf.j2" dest="{{mct_app_home}}-{{item.key}}/mct.{{item.key}}.conf" owner=www mode=0600
   with_dict: mct_envs
   tags: [ config, webapp ]
 
