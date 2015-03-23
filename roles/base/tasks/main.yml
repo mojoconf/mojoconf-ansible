@@ -5,6 +5,8 @@
     - git
     - build-essential
     - logrotate
+    - ruby-sass
+  tags: packages
 
 - name: Create ops group
   group: name=ops state=present
