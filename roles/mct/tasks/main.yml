@@ -7,6 +7,9 @@
     - postgresql-server-dev-9.3
     - python-psycopg2
 
+- include: backup.yml
+  tags: backup
+
 - git: repo=https://github.com/mojoconf/MCT dest="{{mct_app_home}}-{{item.key}}"
   sudo_user: "{{mct_app_user}}"
   sudo: yes

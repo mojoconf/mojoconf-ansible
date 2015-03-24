@@ -1,0 +1,7 @@
+---
+- file: path="/home/www/backup/{{item.key}}" state=directory owner="{{mct_app_user}}" mode=0750
+  with_dict: mct_envs
+- cron: name="backup mcr_{{item.key}}" user="{{mct_app_user}}" minute=0 job="/usr/bin/pg_dump -d mct_{{item.key}} 1>/home/www/backup/{{item.key}}/$(/bin/date +%FT%R).sql 2>/tmp/backup-{{item.key}}.log"
+  with_dict: mct_envs
+- cron: name="purge old backup mcr_{{item.key}}" user="{{mct_app_user}}" minute=30 hour=*/12 job="/usr/bin/find /home/www/backup -type f -mtime +1 -exec rm -f \{\} \; >/dev/null 2>/dev/null"
+  with_dict: mct_envs
