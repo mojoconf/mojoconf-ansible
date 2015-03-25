@@ -1,0 +1,15 @@
+require 'rake'
+require 'rspec/core/rake_task'
+
+namespace :serverspec do
+  desc "Run serverspec tests on the local system"
+  RSpec::Core::RakeTask.new(:localhost) do |t|
+    t.pattern = "spec/*_spec.rb"
+  end
+
+  desc "Run serverspec tests on a Vagrant virtual machine"
+  RSpec::Core::RakeTask.new(:vagrant) do |t|
+    ENV['TARGET_HOST'] = 'default'
+    t.pattern = "spec/*_spec.rb"
+  end
+end

@@ -1,0 +1,19 @@
+---
+# defaults file for inspeqtor
+
+#
+# Mandatory Variables to be defined:
+#
+#inspeqtor_email_send:      inspeqtor@my.company.com
+#inspeqtor_email_recipient: alarms@my.company.com
+
+#
+# Some defaults, to be optionally redefined
+#
+inspeqtor_smtp_host: localhost
+
+# TODO: check which is the better way to deal with opt-in/opt-out proxy variables
+#proxy_env:
+#  fake_dictionary: sddomething
+#  http_proxy: ~
+#  https_proxy: ~

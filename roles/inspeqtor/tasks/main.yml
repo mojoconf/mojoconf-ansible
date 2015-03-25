@@ -1,0 +1,23 @@
+---
+# tasks file for inspeqtor
+
+- name: Include YUM-specific tasks
+  include: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Include APT-specific tasks
+  include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Check for unsupported target operating system
+  fail: msg="The operating system of the target machine ({{ inventory_hostname }}) is not currently supported."
+  when: inspeqtor_supported_os is not defined
+
+- name: Configure Inspeqtor global settings
+  template: src=inspeqtor.conf.j2
+            dest=/etc/inspeqtor/inspeqtor.conf
+            owner=root group=root mode=0600
+  notify: restart inspeqtor
+
+- name: Ensure Inspeqtor is running
+  service: name=inspeqtor state=started enabled=yes

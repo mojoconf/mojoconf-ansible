@@ -1,0 +1,31 @@
+language: python
+python:   2.7
+
+install:
+  - pip install ansible
+  - pip install ansible-lint
+  - ansible --version
+  - ansible-lint --version
+  - bundle install
+
+before_script:
+  - export ANSIBLE_ROLES_PATH="$TRAVIS_BUILD_DIR/../"
+  - export ROLE=inspeqtor
+  - export PLAYBOOK="test/playbook.yml"
+  - export INVENTORY="test/inventory"
+  - export COMMON_ARGS="--inventory-file=$INVENTORY $PLAYBOOK"
+  - echo localhost > $INVENTORY
+  - cp spec/spec_localhost_helper.rb spec/spec_helper.rb
+
+script:
+  - ansible-lint $PLAYBOOK
+  - ansible-playbook $COMMON_ARGS --syntax-check
+  - ansible-playbook $COMMON_ARGS --connection=local -vvv
+  - bundle exec rake serverspec:localhost
+  - sudo inspeqtorctl status
+
+after_success:
+  # investigate https://github.com/alv-ch-ansible-roles/inspeqtor/issues/1
+  - sudo inspeqtorctl
+  - sudo tail -100 /var/log/upstart/inspeqtor.log
+

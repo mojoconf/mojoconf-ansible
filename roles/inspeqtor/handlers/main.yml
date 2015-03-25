@@ -1,0 +1,9 @@
+---
+# handlers file for inspeqtor
+
+- name: reload inspeqtor
+  service: name=inspeqtor state=reloaded
+
+- name: restart inspeqtor
+  service: name=inspeqtor state=restarted
+

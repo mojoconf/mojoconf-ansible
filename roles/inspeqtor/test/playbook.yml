@@ -1,0 +1,15 @@
+---
+- name: Install and Configure Inspeqtor
+
+  hosts: all
+
+  sudo: yes
+  sudo_user: root
+
+  vars:
+    inspeqtor_email_sender: inspeqtor@whynot.com
+    inspeqtor_email_recipient: slash@dev.net
+
+  roles:
+    - inspeqtor
+

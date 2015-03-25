@@ -1,0 +1,11 @@
+---
+
+- name: RedHat | Mark as supported platform
+  set_fact: inspeqtor_supported_os=True
+
+#- name: RedHat | Add official inspeqtor YUM repository
+#- TODO
+
+- name: RedHat | Install YUM Inspeqtor package
+  yum: pkg=inspeqtor state=installed
+

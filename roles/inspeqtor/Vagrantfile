@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  # Enable Vagrant plugins like vagrant-cachier and vagrant-vbguest
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
+  # vagrant-hostmanager plugin required:
+  #config.hostmanager.enabled = true
+  #config.hostmanager.ignore_private_ip = false
+  #config.hostmanager.include_offline = true
+
+  config.vm.define 'default' do |machine|
+    machine.vm.box = 'ubuntu/trusty64'
+
+    machine.vm.provision "ansible" do |ansible|
+      ENV["ANSIBLE_ROLES_PATH"]="$PWD/.."
+      ansible.playbook = "test/playbook.yml"
+      ansible.verbose = 'v'
+      ansible.groups = {
+        "vagrant" => "default"
+      }
+    end
+  end
+
+end

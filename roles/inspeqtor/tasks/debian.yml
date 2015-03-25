@@ -1,0 +1,19 @@
+---
+
+- name: Debian | Mark as supported platform
+  set_fact: inspeqtor_supported_os=True
+
+- name: Debian | Add packagecloud APT Signing Key
+  apt_key: url=https://packagecloud.io/gpg.key state=present
+#  environment: '{{ proxy_env }}'
+
+  # apt-transport-https package is required to add packagecloud.io repository (which uses https)
+- name: Debian | Install apt-transport-https package
+  apt: pkg=apt-transport-https state=installed update_cache=yes cache_valid_time=86400
+
+- name: Debian | Add official Inspeqtor APT repository
+  apt_repository: repo="deb https://packagecloud.io/contribsys/inspeqtor/{{ ansible_lsb.id | lower }} {{ ansible_lsb.codename }} main"
+
+- name: Debian | Install APT Inspeqtor package
+  apt: pkg=inspeqtor state=installed update_cache=yes cache_valid_time=86400
+
